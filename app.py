@@ -23,38 +23,44 @@ def fetch_pokemon_data(pokemon_name):
 # Define a list of Pokémon to display
 pokemon_list = ["pikachu", "charmander", "bulbasaur", "squirtle"]
 
-# Layout with columns for cards
-col1, col2, col3, col4 = st.columns(4)
+# Function to render Pokémon cards
+def render_pokemon_card(name, types, image_url, description):
+    st.markdown(f"""
+    <div style="
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px;
+        text-align: center;
+        box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+        transition: transform 0.2s ease-in-out;
+        background-color: #f9f9f9;
+    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        <img src="{image_url}" style="
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+        " />
+        <h3>{name}</h3>
+        <p>{', '.join(types)}</p>
+        <p>{description}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Create a card for each Pokémon
+# Create a grid layout for the cards
+cols = st.columns(4)
+
+# Render each Pokémon card
 for idx, pokemon_name in enumerate(pokemon_list):
     data = fetch_pokemon_data(pokemon_name)
     if data:
         name = data["name"].capitalize()
         types = [t["type"]["name"] for t in data["types"]]
         description = f"A {', '.join(types)} type Pokémon."
-
-        # Fetch Pokémon image
         image_url = data["sprites"]["front_default"]
-
-        # Determine which column to place the card in
-        if idx % 4 == 0:
-            with col1:
-                st.image(image_url, caption=name, use_column_width=True)
-                st.markdown(f"### {name}")
-                st.write(description)
-        elif idx % 4 == 1:
-            with col2:
-                st.image(image_url, caption=name, use_column_width=True)
-                st.markdown(f"### {name}")
-                st.write(description)
-        elif idx % 4 == 2:
-            with col3:
-                st.image(image_url, caption=name, use_column_width=True)
-                st.markdown(f"### {name}")
-                st.write(description)
-        else:
-            with col4:
-                st.image(image_url, caption=name, use_column_width=True)
-                st.markdown(f"### {name}")
-                st.write(description)
+        
+        # Determine which column to use for the card
+        col_idx = idx % 4
+        with cols[col_idx]:
+            render_pokemon_card(name, types, image_url, description)
