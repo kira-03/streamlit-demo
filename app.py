@@ -23,28 +23,37 @@ def fetch_pokemon_data(pokemon_name):
 # Define a list of Pokémon to display
 pokemon_list = ["pikachu", "charmander", "bulbasaur", "squirtle"]
 
-# Function to render Pokémon cards
+# Define your color scheme
+background_color = "#f0f4f8"  # Light background color
+card_background_color = "#ffffff"  # White background for cards
+text_color = "#333333"  # Dark text color
+
+# Function to render Pokémon cards with complementary colors
 def render_pokemon_card(name, types, image_url, description):
     st.markdown(f"""
     <div style="
-        border: 2px solid #ddd;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #ddd;
         border-radius: 10px;
         padding: 10px;
         margin: 10px;
         text-align: center;
-        box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
-        transition: transform 0.2s ease-in-out;
-        background-color: #f9f9f9;
-    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        background-color: {card_background_color};
+        color: {text_color};
+    ">
         <img src="{image_url}" style="
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             border-radius: 10px;
             object-fit: cover;
+            border: 2px solid {text_color};
         " />
-        <h3>{name}</h3>
-        <p>{', '.join(types)}</p>
-        <p>{description}</p>
+        <h3 style="margin: 10px 0;">{name}</h3>
+        <p style="margin: 5px 0;">Type: {', '.join(types)}</p>
+        <p style="margin: 5px 0;">{description}</p>
     </div>
     """, unsafe_allow_html=True)
 
